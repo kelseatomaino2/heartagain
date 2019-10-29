@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Sensor Example{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+    {% load staticfiles%}
+  <div class="section">
+    <div class="container">
+          <h1>Sensor Reading</h1>
+
+        <p>
+          <div id="sensor">Sensor Reading: {{ sensor }}</div>
+        </p>
+
+    </div>
+  </div>
+  <script type="text/javascript" src='{% static "jquery-1.12.1.min.js" %}'></script>
+  <script type="text/javascript" src='{% static "reconnecting-websocket.min.js" %}'></script>
+  <script type="text/javascript" src='{% static "sensor.js" %}'></script>
+</body>
+</html>
