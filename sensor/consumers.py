@@ -5,43 +5,45 @@ import json
 
 class EventConsumer(WebsocketConsumer):
 
-    def ws_connect(self):
+    def ws_connect(self, text_data):
+        path = message['path']
+        self.group_name = 'sensor'
+        text_data_json = json.loads(text_data)
+        message = text_data_json['message']
+
+        if path == '/sensor/':
+            print("Adding new user to sensor group")
+            async_to_sync(self.channel_layer.group_add)(
+                self.group_name,
+                self.channel_name)
+
+            async_to_sync(self.channel_layer.group_send)(
+            self.group_name,
+            {
+                'type': 'sensor_reading',
+                'message': message
+            }
+        )
+
         self.accept()
 
     def ws_disconnect(self, close_code):
-        print("disconnect")
-        pass
+        async_to_sync(self.channel_layer.group_discard)(
+            self.group_name,
+            self.channel_name
+        )
 
     def ws_receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 
-        self.send(text_data=json.dumps({
-            'message': message
-        }))
+        # Send message to room group
+        async_to_sync(self.channel_layer.group_send)(
+            self.group_name,
+            {
+                'type': 'sensor_reading',
+                'message': message
+            }
+        )
        
-       
-            
-        
-
-    # def ws_connect(message):
-    #     print("Someone connected.")
-    #     path = message['path']                                                      # i.e. /sensor/
-
-    #     if path == b'/sensor/':
-    #         print("Adding new user to sensor group")
-    #         Group("sensor").add(message.reply_channel)                             # Adds user to group for broadcast
-    #         message.reply_channel.send({                                            # Reply to individual directly
-    #            "text": "You're connected to sensor group :) ",
-    #         })
-    #     else:
-    #         print("Strange connector!!")
-
-    # def ws_message(message):
-    #     # ASGI WebSocket packet-received and send-packet message types
-    #     # both have a "text" key for their textual data.
-    #     print("Received!!" + message['text'])
-
-    # def ws_disconnect(message):
-    #     print("Someone left us...")
-    #     Group("sensor").discard(message.reply_channel)
+    
