@@ -22,12 +22,13 @@ SECRET_KEY = '7wg2o*v9esc1rxgmxdl55n@_o11l1=7mc+mn+l-*vug8(fp7m7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.129']
+ALLOWED_HOSTS = ['192.168.0.129', '127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'heartagain',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -65,7 +66,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'sensor.wsgi.application'
+WSGI_APPLICATION = "sensor.wsgi.application"
 
 
 # Database
@@ -122,11 +123,10 @@ ASGI_APPLICATION = "sensor.routing.application"
 
 CHANNEL_LAYERS = {
  "default": {
-    "BACKEND": "asgi_redis.RedisChannelLayer",
-    # "BACKEND": "channels_redis.core.RedisChannelLayer",
+    #"BACKEND": "asgi_redis.RedisChannelLayer",
+    "BACKEND": "channels_redis.core.RedisChannelLayer",
     "CONFIG": {
-       "hosts":[os.environ.get('REDIS_URL', 'redis://localhost:6379')],
- },
- "ROUTING": "sensor.routing.channel_routing",
+       "hosts":[os.environ.get('REDIS_URL', 'redis://localhost:6379'), '127.0.0.1'],
+    },
  },
 }

@@ -17,6 +17,7 @@ wheels/
 *.egg 
 *.manifest 
 *.spec 
+*DS_STORE
 
 # Python # 
 *.py[cod] 

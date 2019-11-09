@@ -1,7 +1,13 @@
-from sensor.consumers import ws_message, ws_connect, ws_disconnect
+from channels.auth import AuthMiddlewareStack
+from sensor.consumers import EventConsumer
+from channels.routing import ProtocolTypeRouter, URLRouter
+import heartagain.routing
 
-channel_routing = {
-    'websocket.connect': ws_connect,
-    'websocket.receive': ws_message,
-    'websocket.disconnect': ws_disconnect,
-}
+application = ProtocolTypeRouter({
+    # (http->django views is added by default)
+     'websocket': AuthMiddlewareStack(
+        URLRouter(
+            heartagain.routing.websocket_urlpatterns
+        )
+    ),
+})
