@@ -28,6 +28,7 @@ ALLOWED_HOSTS = ['192.168.0.129', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'sensorWorker',
     'heartagain',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -74,8 +76,12 @@ WSGI_APPLICATION = "sensor.wsgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DB_NAME','heartagain'),
+        'USER': os.environ.get('DB_USER', 'rpi_user'),
+        'PASSWORD': os.environ.get('DB_PASS', 'rpi_user'),
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -118,6 +124,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS =  ( os.path.join(BASE_DIR, 'sensor/static/'),)
+#PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+#STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 
 ASGI_APPLICATION = "sensor.routing.application"
 
@@ -126,7 +134,7 @@ CHANNEL_LAYERS = {
     #"BACKEND": "asgi_redis.RedisChannelLayer",
     "BACKEND": "channels_redis.core.RedisChannelLayer",
     "CONFIG": {
-       "hosts":[os.environ.get('REDIS_URL', 'redis://localhost:6379'), '127.0.0.1'],
+        "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
     },
  },
 }
