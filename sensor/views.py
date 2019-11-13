@@ -3,6 +3,7 @@ from django.http import JsonResponse
 import datetime
 from django.contrib.auth import get_user_model
 from django.views.generic import View
+from .retrieve_historical import HistoricalEcgData
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -33,8 +34,12 @@ class ChartData(APIView):
     permission_classes = []
 
     def get(self, request, format=None):
-        data = {
-            "date": datetime.datetime.now(),
-            "ecg_value": 900,
-        }   
+        user_id = 'testid'
+        date = datetime.date(year=2019, month=11, day=11)
+        data = HistoricalEcgData.retrieve_data(user_id, date)
         return Response(data)
+
+
+
+
+

@@ -124,5 +124,5 @@ class EcgData(models.Model):
     ecg_value = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
     class Meta:
-        managed = False
+        app_label = 'heartagain'
         db_table = 'ecg_data'
