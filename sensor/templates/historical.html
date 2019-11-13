@@ -20,20 +20,12 @@ $.ajax({
     }
 })
 
-
-Chart.pluginService.register({
-    beforeDraw: function (chart, easing) {
-        if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
-            var helpers = Chart.helpers;
-            var ctx = chart.chart.ctx;
-            var chartArea = chart.chartArea;
-
-            ctx.save();
-            ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
-            ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
-            ctx.restore();
-        }
-    }
+Chart.plugins.register({
+  beforeDraw: function(chartInstance) {
+    var ctx = chartInstance.chart.ctx;
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
+  }
 });
 
 function setChart(){
@@ -55,6 +47,7 @@ function setChart(){
         title: {
             display: true,
             text: 'ECG Data for ',
+            fontColor: "white",
             chartArea: {
             backgroundColor: 'rgba(251, 85, 85, 0.4)'
             }
@@ -63,7 +56,8 @@ function setChart(){
             yAxes: [{
                 ticks: {
                     suggestedMin: 900,
-                    suggestedMax: 1000
+                    suggestedMax: 1000,
+                    fontColor: "white"
                 },
                 gridLines: {
                     display: false
