@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transport History</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4" id="sidenav">
+                <h4 style="font-family: Franklin Gothic;">Search Transport History</h4><br>
+                <form>
+                    <p>ID <br> <input type="text" name="id" placeholder="Enter 9-digit ID number here"></p>
+                    <p>Start date <br> <input type="text" name="startDate" placeholder="Enter start date"></p>
+                    <p>End date <br> <input type="text" name="endDate" placeholder="Enter end date"></p>
+                    <p>Start time <br> <input type="text" name="startTime" placeholder="Enter start time"></p>
+                    <p>End time <br> <input type="text" name="endTime" placeholder="Enter end time"></p><br>
+                    <input id="submitButton" type="submit" value="Search">
+                </form>
+            </div>
+            <div class="col-sm-8" id="mainsearch">
+                <div class="header">
+                    <h1>Transport History</h1>
+                    <img src="base/heartagainlogo.png"/>
+                </div>
+                <br>
+                <table id="patientlist">
+                    <tr>
+                        <th>ID</th>
+                        <th>Start date</th>
+                        <th>End date</th>
+                        <th>Start time</th>
+                        <th>End time</th>
+                    </tr>
+                    <tr>
+                        <td>421482123</td>
+                        <td>08/01/2002</td>
+                        <td>08/01/2002</td>
+                        <td>13:34</td>
+                        <td>15:23</td>
+                    </tr>
+                    <tr>
+                        <td>356482123</td>
+                        <td>09/01/2003</td>
+                        <td>09/02/2003</td>
+                        <td>23:01</td>
+                        <td>7:46</td>
+                    </tr>
+                    <tr>
+                        <td>132312311</td>
+                        <td>11/22/2006</td>
+                        <td>11/22/2006</td>
+                        <td>11:10</td>
+                        <td>15:54</td>
+                    </tr>
+                    <tr>
+                        <td>543534441</td>
+                        <td>12/25/2010</td>
+                        <td>12/26/2010</td>
+                        <td>20:10</td>
+                        <td>5:32</td>
+                    </tr>
+                    <tr>
+                        <td>123538911</td>
+                        <td>01/15/2015</td>
+                        <td>01/15/2015</td>
+                        <td>17:10</td>
+                        <td>20:32</td>
+                    </tr>
+                                        <tr>
+                        <td>132312311</td>
+                        <td>11/22/2006</td>
+                        <td>11/22/2006</td>
+                        <td>11:10</td>
+                        <td>15:54</td>
+                    </tr>
+                    <tr>
+                        <td>543534441</td>
+                        <td>12/25/2010</td>
+                        <td>12/26/2010</td>
+                        <td>20:10</td>
+                        <td>5:32</td>
+                    </tr>
+                    <tr>
+                        <td>123538911</td>
+                        <td>01/15/2015</td>
+                        <td>01/15/2015</td>
+                        <td>17:10</td>
+                        <td>20:32</td>
+                    </tr>
+                    <tr>
+                        <td>123538911</td>
+                        <td>01/15/2015</td>
+                        <td>01/15/2015</td>
+                        <td>17:10</td>
+                        <td>20:32</td>
+                    </tr>
+                </table>
+                <div id="navbuttonContainer">
+                    <button id="navbutton" style="margin-left:5px;">Live Monitoring</button>
+                    <button id="navbutton" style="margin-right:5px;">Data History</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
