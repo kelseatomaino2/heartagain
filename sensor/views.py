@@ -14,6 +14,11 @@ def home(request):
         'date': datetime.datetime.now(),
     })
 
+def search(request):
+
+    return render(request, 'search.html', {
+        })
+
 def sensor(request):
 	  return render(request, 'sensor.html', {
         'sensor': '99',

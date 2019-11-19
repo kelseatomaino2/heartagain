@@ -11,3 +11,9 @@ application = ProtocolTypeRouter({
         )
     ),
 })
+
+channel_routing = {
+    'websocket.connect': EventConsumer.ws_connect,
+    'websocket.receive': EventConsumer.ws_receive,
+    'websocket.disconnect': EventConsumer.ws_disconnect,
+}

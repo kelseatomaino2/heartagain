@@ -1,3 +1,129 @@
-canvas {
-   background-color: #666;
+#sidenav {
+    min-height:100vh;
+    background-color: #FCF2C7;
+    padding-top: 20px;
 }
+
+#patientlist{
+    font-family:'Franklin Gothic';
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#patientlist td, #patientlist th{
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+#patientlist tr:hover{
+    background-color: #ddd;
+}
+
+#patientlist th{
+    padding-top: 12px;
+    padding-bottom: 12px;
+    font-size:1.2em;
+    background-color: #446AB8;
+    color: white;
+}
+
+#patientlist td{
+    color: #696969;
+}
+
+h1 {
+    font-family: 'Franklin Gothic';
+    color: #446AB8;
+    padding-left: 10px;
+}
+
+p {
+    font-family: 'Franklin Gothic';
+    padding-top: 5px;
+    padding-left: 2px;
+}
+
+input {
+    padding-left: 5px;
+    padding-top: 5px;
+    width:100%;
+}
+
+#submitButton{
+    text-align:center;
+    font-family: 'Franklin Gothic';
+    width:30%;
+    background-color: #446AB8;
+    color: #FFF;
+    border:0;
+    padding-bottom:5px;
+    float:right;
+}
+
+#submitButton:hover{
+    background-color: #4C516D;
+}
+
+#navbutton{
+    width:1;
+    text-align:center;
+    font-family: 'Franklin Gothic';
+    background-color: #446AB8;
+    color: #FFF;
+    border:0;
+    float: right;
+    padding: 8px 25px 8px 25px;
+}
+
+#navbutton:hover{
+    background-color: #4C516D;
+}
+
+#navbuttonContainer{
+    width:40%;
+    padding-top:20px;
+    padding-bottom:10px;
+    float:right;
+}
+
+.header{
+    padding-bottom:30px;
+}
+
+.header h1{
+    float:left;
+}
+
+.header img{
+    float:right;
+    width: 139.8px;
+    height: 81px;
+}
+
+#homelogo{
+    width:70%;
+    display: block;
+    margin: 0 auto;
+}
+
+#homenav{
+    background-color: #FCF2C7;
+    padding-top:60px;
+    padding-bottom:60px;
+    min-height:40vh;
+}
+
+#homenavbutton{
+    width:1;
+    font-family: 'Franklin Gothic';
+    background-color: #446AB8;
+    color: #FFF;
+    border:0;
+    padding: 12px 30px 12px 30px;
+}
+
+#homenavbutton:hover{
+    background-color:  #4C516D;
+}
+

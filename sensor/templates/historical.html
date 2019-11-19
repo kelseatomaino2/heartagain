@@ -11,6 +11,9 @@ $.ajax({
         defaultData = data.values
         defaultLabels = data.labels
         defaultID = data.user_id
+        historyDate = data.date
+        document.getElementById('historyDate').innerHTML = "Historical Date: " + String(historyDate)
+        document.getElementById('IDName').innerHTML = "ID " + defaultID
         console.log(data)
         setChart()
     },
@@ -37,7 +40,7 @@ function setChart(){
         datasets: [{ 
             label: defaultID,
             data: defaultData,
-            borderColor: "#3e95cd",
+            borderColor: "#FFDA77",
             fill: false,
             pointRadius: 0,
           },
@@ -45,7 +48,7 @@ function setChart(){
       },
       options: {
         title: {
-            display: true,
+            display: false,
             text: 'ECG Data for ',
             fontColor: "white",
             chartArea: {
@@ -78,19 +81,119 @@ function setChart(){
 
 {% block content %}
 <!DOCTYPE html>
+{% load static %} 
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="style.css">
-</head>
+<style type="text/css" media="screen">
+    h1{
+        color: "black";
+    }
+    .chartContainer{
+        text-align: center;
+    }
+    h4{
+        color: "black";
 
-<div class='row'>
-    <div class='col-sm-12'>
-        <h1>Historical ECG Trace</h1>
-        <div class='col-sm-6'>
+    }
+    canvas{
+        width: 60% !important;
+        height: 400px !important;
+        margin: 0;
+    }
+    canvas{
+        margin: 0 auto;
+    }
+    img { 
+        width: 20%;
+        float: right;
+    }
+    input {
+        margin-top: 25px;
+        margin-left: 75px;
+        background-color: #446AB8;
+        font-family: "Arial";
+        color: white;
+    }
+    p {
+        background-color: #FFDA77;
+        font-family: "Arial";
+        color: black;
+        font-size: 18px;
+        text-align: center;
+    }
+
+
+    #infobox{
+        background-color: #FFDA77;
+        margin-left: 10px;
+        margin-right: 5px;
+        padding-top: 5px;
+
+    }
+
+    #navbutton{
+        width:1;
+        text-align:center;
+        font-family: 'Arial';
+        background-color: #446AB8;
+        color: #FFF;
+        border:0;
+        float: right;
+        padding: 10px 30px 10px 30px;
+    }
+
+    #navbutton:hover{
+        background-color: #4C516D;
+    }
+
+    #navbuttonContainer{
+        width:40%;
+        padding-top:20px;
+        padding-bottom:10px;
+        margin-right: 20px;
+        float:right;
+    }
+    a:link {color: black;}      /* unvisited link */
+    a:visited {color: black;}   /* visited link */
+    a:active {color: black;}
+    a:hover {text-decoration: none;}
+
+    #info{
+        width: 100%;
+        margin-left: 100px;
+    }
+</style>
+</head>
+<body>
+    <div class='row'>
+        <div class='col-sm-12' style="margin-bottom: 10px;">
+            <img src="{% static 'logo.jpg' %}" alt="Mountain">
+            <h1 id="IDName"> </h1>
+            <h4 id="historyDate"> </h4>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='chartContainer' style="margin-bottom: 30px;">
             <canvas id="myChart" width="1000" height="1000"></canvas>
         </div>
     </div>
-</div>
+    <div class='row' style="text-align:center" id="info">
+        <div class='col-sm-3' id="infobox">
+            <p> Average Flow Rate: <br/> 10ml/min</p>
+        </div>
+        <div class='col-sm-3' id="infobox">
+            <p> Transport time: <br/> 01:30:10</p>
+        </div>
+        <div class='col-sm-3' id="infobox">
+            <p> Average Pressure: <br/> 40 mmHg</p>
+    </div>
+    <div class='row' id="navbuttonContainer">
+        <a href="{% url 'home' %}" id="navbutton" style="margin-left:5px;">Live Monitoring</a>
+        <a href="{% url 'search' %}" id="navbutton" style="margin-right:5px;">Data History</a>
+    </div>
+    </div>
+</body>
+
 </html>
 
 {% endblock content %}
