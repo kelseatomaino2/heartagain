@@ -1,4 +1,4 @@
-#!/Users/kelseatomaino/Desktop/BME461/heartagain/heartenv/bin/python3.6
+#!/Users/kelseatomaino/Desktop/BME461/heartagain/heartenv/bin/python3
 from django.core import management
 
 if __name__ == "__main__":
