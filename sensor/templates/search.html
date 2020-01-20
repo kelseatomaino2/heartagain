@@ -123,13 +123,15 @@
         <div class="row">
             <div class="col-sm-4" id="sidenav">
                 <h4 style="font-family: Arial;">Search Transport History</h4><br>
-                <form>
-                    <p>ID <br> <input type="text" name="id" placeholder="Enter 9-digit ID number here"></p>
+                <form method="post">
+                {% csrf_token %}
+                {{ form.post }}
+                    <p><label for="user_id">ID </label><br> <input type="text" name="id" placeholder="Enter 9-digit ID number here"></p>
                     <p>Start date <br> <input type="text" name="startDate" placeholder="Enter start date"></p>
                     <p>End date <br> <input type="text" name="endDate" placeholder="Enter end date"></p>
                     <p>Start time <br> <input type="text" name="startTime" placeholder="Enter start time"></p>
                     <p>End time <br> <input type="text" name="endTime" placeholder="Enter end time"></p><br>
-                    <input id="submitButton" type="submit" value="Search">
+                    <button id="submitButton" type="submit">Submit</button>
                 </form>
             </div>
             <div class="col-sm-8" id="mainsearch">
@@ -155,7 +157,7 @@
                         <td>15:23</td>
                     </tr>
                     <tr>
-                        <td>356482123</td>
+                        <td>{{ user_id }}</td>
                         <td>09/01/2003</td>
                         <td>09/02/2003</td>
                         <td>23:01</td>

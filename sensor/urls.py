@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^home/', views.home, name='home'),
     url(r'^sensor/', views.sensor, name='sensor'),
-    url(r'^search/', views.search, name='search'),
+    url(r'^search/', views.search.as_view(), name='search'),
     url(r'^api/historical/$', views.get_historical_data, name='api-historical'),
     url(r'^historical/', views.historical, name='historical'),
     url(r'^api/chart/historical/$', views.ChartData.as_view()),

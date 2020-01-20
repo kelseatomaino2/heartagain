@@ -1,9 +1,11 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView
 from django.http import JsonResponse
 import datetime
 from django.contrib.auth import get_user_model
 from django.views.generic import View
 from .retrieve_historical import HistoricalEcgData
+from .search_data import SearchData
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -14,10 +16,22 @@ def home(request):
         'date': datetime.datetime.now(),
     })
 
-def search(request):
+class search(TemplateView):
+    def get(self, request):
+        form = SearchData()
+        return render(request, 'search.html', {'form':form})
+    def post(self, request):
+        form = SearchData(request.POST)
+        if form.is_valid():
+            print(form)
+            text = form.cleaned_data['post']
+            form = HomeForm()
+            return redirect('home')
+        form_dict = dict(request.POST)
+        user_id = form_dict['id'][0]
+        args = {'form': form, 'user_id': user_id}
+        return render(request, 'search.html', args)
 
-    return render(request, 'search.html', {
-        })
 
 def sensor(request):
 	  return render(request, 'sensor.html', {
