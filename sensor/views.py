@@ -5,10 +5,10 @@ import datetime
 from django.contrib.auth import get_user_model
 from django.views.generic import View
 from .retrieve_historical import HistoricalEcgData
-from .search_data import SearchData
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from sensorWorker.models import EcgData
 
 def home(request):
 
@@ -17,20 +17,31 @@ def home(request):
     })
 
 class search(TemplateView):
+
     def get(self, request):
-        form = SearchData()
-        return render(request, 'search.html', {'form':form})
+        values = EcgData.objects.all().filter(user_id='testid')
+        print(values)
+        return render(request, 'search.html',)
+
     def post(self, request):
-        form = SearchData(request.POST)
-        if form.is_valid():
-            print(form)
-            text = form.cleaned_data['post']
-            form = HomeForm()
-            return redirect('home')
         form_dict = dict(request.POST)
         user_id = form_dict['id'][0]
-        args = {'form': form, 'user_id': user_id}
+        args = self.query_database(user_id)
+        values = EcgData.objects.all().filter(user_id='testid')
         return render(request, 'search.html', args)
+
+    def query_database(self, user_id, start_date=None, end_date=None, start_time=None, end_time=None):
+        values = EcgData.objects.all().filter(user_id='testid', date=start_date)
+        data = {}
+        data['date'] = start_date
+        data['user_id'] = user_id
+        data['values'] = []
+        data['labels'] = []
+        for ecg_entry in values:
+            x = 0
+            data['values'].append(ecg_entry.ecg_value)
+            data['labels'].append(x)
+        return data
 
 
 def sensor(request):
