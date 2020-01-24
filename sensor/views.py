@@ -16,36 +16,8 @@ def home(request):
         'date': datetime.datetime.now(),
     })
 
-class search(TemplateView):
-
-    def get(self, request):
-        values = EcgData.objects.all().filter(user_id='testid')
-        print(values)
-        return render(request, 'search.html',)
-
-    def post(self, request):
-        form_dict = dict(request.POST)
-        user_id = form_dict['id'][0]
-        args = self.query_database(user_id)
-        values = EcgData.objects.all().filter(user_id='testid')
-        return render(request, 'search.html', args)
-
-    def query_database(self, user_id, start_date=None, end_date=None, start_time=None, end_time=None):
-        values = EcgData.objects.all().filter(user_id='testid', date=start_date)
-        data = {}
-        data['date'] = start_date
-        data['user_id'] = user_id
-        data['values'] = []
-        data['labels'] = []
-        for ecg_entry in values:
-            x = 0
-            data['values'].append(ecg_entry.ecg_value)
-            data['labels'].append(x)
-        return data
-
-
 def sensor(request):
-	  return render(request, 'sensor.html', {
+    return render(request, 'sensor.html', {
         'sensor': '99',
     })
 
@@ -69,7 +41,33 @@ class ChartData(APIView):
         data = HistoricalEcgData.retrieve_data(user_id, date)
         return Response(data)
 
+class search(TemplateView):
 
+    def get(self, request):
+        values = EcgData.objects.all().filter(user_id='testid')
+        print(values)
+        return render(request, 'search.html',)
 
+    def post(self, request):
+        form_dict = dict(request.POST)
+        user_id = form_dict['id'][0]
+        start_date = form_dict['start_date'][0]
+        end_date = form_dict['end_date'][0]
+        start_time = form_dict['start_time'][0]
+        end_time = form_dict['end_time'][0]
+        args = self.query_database(user_id)
+        values = EcgData.objects.all().filter(user_id='testid')
+        return render(request, 'search.html', args)
 
-
+    def query_database(self, user_id=None, start_date=None, end_date=None, start_time=None, end_time=None):
+        values = EcgData.objects.all().filter(user_id='testid', date=start_date)
+        data = {}
+        data['date'] = start_date
+        data['user_id'] = user_id
+        data['values'] = []
+        data['labels'] = []
+        for ecg_entry in values:
+            x = 0
+            data['values'].append(ecg_entry.ecg_value)
+            data['labels'].append(x)
+        return data
