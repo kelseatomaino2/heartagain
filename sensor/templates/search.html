@@ -127,10 +127,10 @@
                 {% csrf_token %}
                 {{ form.post }}
                     <p><label for="user_id">ID </label><br> <input type="text" name="id" placeholder="Enter 9-digit ID number here"></p>
-                    <p>Start date <br> <input type="text" name="startDate" placeholder="Enter start date"></p>
-                    <p>End date <br> <input type="text" name="endDate" placeholder="Enter end date"></p>
-                    <p>Start time <br> <input type="text" name="startTime" placeholder="Enter start time"></p>
-                    <p>End time <br> <input type="text" name="endTime" placeholder="Enter end time"></p><br>
+                    <p>Start date <br> <input type="text" name="startDate" placeholder="Enter start date YYYY-MM-DD"></p>
+                    <p>End date <br> <input type="text" name="endDate" placeholder="Enter end date YYYY-MM-DD"></p>
+                    <p>Start time <br> <input type="text" name="startTime" placeholder="Enter start time HH:MM:SS"></p>
+                    <p>End time <br> <input type="text" name="endTime" placeholder="Enter end time HH:MM:SS"></p><br>
                     <button id="submitButton" type="submit">Submit</button>
                 </form>
             </div>
