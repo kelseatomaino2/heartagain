@@ -6,8 +6,8 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
-
 import os
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,8 +28,8 @@ ALLOWED_HOSTS = ['192.168.0.129', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
-    'sensorWorker',
     'heartagain',
+    'sensorWorker',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -69,7 +69,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "sensor.wsgi.application"
-
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -138,7 +137,7 @@ CHANNEL_LAYERS = {
     #"BACKEND": "asgi_redis.RedisChannelLayer",
     "BACKEND": "channels_redis.core.RedisChannelLayer",
     "CONFIG": {
-        "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+         "hosts": [('127.0.0.1', 6379)],
     },
  },
 }

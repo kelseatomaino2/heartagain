@@ -13,11 +13,11 @@ class Command(BaseCommand):
     # A command must define handle()
     def handle(self, *args, **options):
         self.channel_layer = get_channel_layer()
-        self.group_name = 'sensor'
+        self.room_group_name = 'sensor'
         x = 0
         while True:
             async_to_sync(self.channel_layer.group_send)(
-                self.group_name,
+                self.room_group_name,
                 {
                     'type' : 'sensor_reading',
                     'message': 'sensor_reading...' + str(x),
