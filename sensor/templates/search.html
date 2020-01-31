@@ -140,78 +140,29 @@
                     <img src="{% static 'logo.jpg' %}" alt="Logo">
                 </div>
                 <br>
-                <table id="patientlist">
-                    <tr>
-                        <th>ID</th>
-                        <th>Start date</th>
-                        <th>End date</th>
-                        <th>Start time</th>
-                        <th>End time</th>
-                    </tr>
-                    <tr>
-                        <a href="{% url 'historical' %}">
-                        <td> <a href="{% url 'historical' %}">testid </a></td>
-                        <td>11/11/2019</td>
-                        <td>11/11/2019</td>
-                        <td>13:34</td>
-                        <td>15:23</td>
-                    </tr>
-                    <tr>
-                        <td>{{ user_id }}</td>
-                        <td>09/01/2003</td>
-                        <td>09/02/2003</td>
-                        <td>23:01</td>
-                        <td>7:46</td>
-                    </tr>
-                    <tr>
-                        <td>132312311</td>
-                        <td>11/22/2006</td>
-                        <td>11/22/2006</td>
-                        <td>11:10</td>
-                        <td>15:54</td>
-                    </tr>
-                    <tr>
-                        <td>543534441</td>
-                        <td>12/25/2010</td>
-                        <td>12/26/2010</td>
-                        <td>20:10</td>
-                        <td>5:32</td>
-                    </tr>
-                    <tr>
-                        <td>123538911</td>
-                        <td>01/15/2015</td>
-                        <td>01/15/2015</td>
-                        <td>17:10</td>
-                        <td>20:32</td>
-                    </tr>
-                                        <tr>
-                        <td>132312311</td>
-                        <td>11/22/2006</td>
-                        <td>11/22/2006</td>
-                        <td>11:10</td>
-                        <td>15:54</td>
-                    </tr>
-                    <tr>
-                        <td>543534441</td>
-                        <td>12/25/2010</td>
-                        <td>12/26/2010</td>
-                        <td>20:10</td>
-                        <td>5:32</td>
-                    </tr>
-                    <tr>
-                        <td>123538911</td>
-                        <td>01/15/2015</td>
-                        <td>01/15/2015</td>
-                        <td>17:10</td>
-                        <td>20:32</td>
-                    </tr>
-                    <tr>
-                        <td>123538911</td>
-                        <td>01/15/2015</td>
-                        <td>01/15/2015</td>
-                        <td>17:10</td>
-                        <td>20:32</td>
-                    </tr>
+                {% if is_valid %}
+                    <table id="patientlist">
+                        <tr>
+                            <th>ID</th>
+                            <th>Start date</th>
+                            <th>End date</th>
+                            <th>Start time</th>
+                            <th>End time</th>
+                        </tr>
+                    
+                        {% for entry in results %}
+                        <tr>
+                            <a href="{% url 'historical' %}">
+                            <td> <a href="{% url 'historical' %}">testid </a></td>
+                            <td>{{ entry.start_date }}</td>
+                            <td>{{ entry.end_date }}</td>
+                            <td>{{ entry.start_time }}</td>
+                            <td>{{ entry.end_time }}</td>
+                        </tr>
+                       {% endfor %}
+                    {% else %}
+                        <h1> {{ message }}</h1>
+                    {% endif %}
                 </table>
                 <div id="navbuttonContainer">
                     <a href="{% url 'home' %}" id="navbutton" style="margin-left:5px;">Live Monitoring</a>
