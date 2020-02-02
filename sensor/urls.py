@@ -15,13 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from sensor import views
-from . import consumers
+from sensorWorker import views
+from django.urls import path
+from django.conf.urls import include
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^home/', views.home, name='home'),
-    url(r'^sensor/', views.sensor, name='sensor'),
+    path('sensor/', include('sensorWorker.urls')),
     url(r'^search/', views.search.as_view(), name='search'),
     url(r'^api/historical/$', views.get_historical_data, name='api-historical'),
     url(r'^historical/', views.historical, name='historical'),

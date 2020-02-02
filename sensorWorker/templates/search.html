@@ -160,10 +160,20 @@
                             <td>{{ entry.end_time }}</td>
                         </tr>
                        {% endfor %}
+                    </table>
                     {% else %}
+                        <table id="patientlist">
+                        <tr>
+                            <th>ID</th>
+                            <th>Start date</th>
+                            <th>End date</th>
+                            <th>Start time</th>
+                            <th>End time</th>
+                        </tr>
+                        </table>
                         <h1> {{ message }}</h1>
                     {% endif %}
-                </table>
+               
                 <div id="navbuttonContainer">
                     <a href="{% url 'home' %}" id="navbutton" style="margin-left:5px;">Live Monitoring</a>
                     <a href="{% url 'home' %}" id="navbutton" style="margin-right:5px;">Data History</a>

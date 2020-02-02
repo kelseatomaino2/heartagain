@@ -7,7 +7,7 @@ class HistoricalEcgData():
 	def retrieve_data(user_id, date):
 		EcgData = apps.get_model('sensorWorker', 'EcgData')
 		ecg_data = EcgData.objects.all().filter(user_id='testid')
-		print(ecg_data)
+		#print(ecg_data)
 		data = {}
 		data['date'] = date
 		data['user_id'] = user_id
