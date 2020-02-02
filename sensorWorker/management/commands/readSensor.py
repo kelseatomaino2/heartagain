@@ -20,7 +20,8 @@ class Command(BaseCommand):
                 self.room_group_name,
                 {
                     'type' : 'sensor_reading',
-                    'message': 'sensor_reading...' + str(x),
+                    'ecg_value': x,
+                    'flow_value': x
                 }
             )
             time.sleep(1)

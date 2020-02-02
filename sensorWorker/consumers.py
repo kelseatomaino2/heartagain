@@ -25,24 +25,21 @@ class EventConsumer(WebsocketConsumer):
    
     # Receive message from WebSocket
     def receive(self, text_data):
-        #text_data = "Sensor reading:1001"
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        print(message)
+        print(ecg_value)
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
-            {
-                'type': 'sensor_reading',
-                'message': message
-            }
+            text_data_json
         )
 
     # Receive message from room group
     def sensor_reading(self, event):
-        message = event['message']
+        ecg_value = event['ecg_value']
+        flow_value = event['flow_value']
 
         # Send message to WebSocket
         self.send(text_data=json.dumps({
-            'message': message
+            'ecg_value': ecg_value,
+            'flow_value': flow_value
         }))

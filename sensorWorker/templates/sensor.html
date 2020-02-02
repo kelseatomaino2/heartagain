@@ -1,57 +1,202 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>{% block title %}Sensor Example{% endblock %}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-</head>
-<body>
-    {% load static %}
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br/>
-  <div class="section">
-    <div class="container">
-          <h1>Sensor Reading</h1>
-
-        <p>
-          <div id="sensor">Sensor Reading: {{ sensor }}</div>
-        </p>
-
-    </div>
-  </div>
-  </body>
+{% extends 'base.html' %}
+{% load static %}
   <script type="text/javascript" src='{% static "jquery-1.12.1.min.js" %}'></script>
   <script type="text/javascript" src='{% static "reconnecting-websocket.min.js" %}'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js'></script>
   <script>
+  {% block jquery %}
+
+    Chart.plugins.register({
+      beforeDraw: function(chartInstance) {
+        var ctx = chartInstance.chart.ctx;
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
+      }
+    });
+
+    var lineChartData = {
+      labels: [],
+      datasets: [{ 
+            label: "Live Data",
+            data: [],
+            borderColor: "#FFDA77",
+            fill: false,
+            pointRadius: 0,
+          }]
+    };
+
+    var ctx = document.getElementById("canvas").getContext("2d");
+    var myLine = new Chart(ctx , {
+    type: "line",
+    data: lineChartData,
+    options: {
+        title: {
+            display: false,
+            text: 'ECG Data for ',
+            fontColor: "white",
+            chartArea: {
+            backgroundColor: 'rgba(251, 85, 85, 0.4)'
+            }
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    fontColor: "white"
+                },
+                gridLines: {
+                    display: false
+                }
+            }],
+            xAxes: [{
+                display: false 
+            },
+        ]
+        },
+      }, 
+    });
+
+    
     var chatSocket = new WebSocket(
         'ws://' + window.location.host +
         '/ws/sensor/');
 
     chatSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
-        var message = data['message'];
-        document.querySelector('#chat-log').value += (message + '\n');
+        lineChartData.labels.push(data['label']);
+        lineChartData.datasets[0].data.push(data['ecg_value']);
+        myLine.update();
+        document.getElementById("flow-val").innerHTML = "Average Flow Rate: " + '\n' + data['flow_value'];
     };
 
     chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
     };
 
-    document.querySelector('#chat-message-input').focus();
-    document.querySelector('#chat-message-input').onkeyup = function(e) {
-        if (e.keyCode === 13) {  // enter, return
-            document.querySelector('#chat-message-submit').click();
-        }
-    };
-
-    document.querySelector('#chat-message-submit').onclick = function(e) {
-        var messageInputDom = document.querySelector('#chat-message-input');
-        var message = messageInputDom.value;
-        chatSocket.send(JSON.stringify({
-            'message': message
-        }));
-
-        messageInputDom.value = '';
-    };
+{% endblock %}
 </script>
+
+{% block content %}
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Sensor Example{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style type="text/css" media="screen">
+    h1{
+        color: "black";
+    }
+    .chartContainer{
+        text-align: center;
+    }
+    h4{
+        color: "black";
+
+    }
+    canvas{
+        width: 60% !important;
+        height: 400px !important;
+        margin: 0;
+    }
+    canvas{
+        margin: 0 auto;
+    }
+    img { 
+        width: 20%;
+        float: right;
+    }
+    input {
+        margin-top: 25px;
+        margin-left: 75px;
+        background-color: #446AB8;
+        font-family: "Arial";
+        color: white;
+    }
+    p {
+        background-color: #FFDA77;
+        font-family: "Arial";
+        color: black;
+        font-size: 18px;
+        text-align: center;
+    }
+
+
+    #infobox{
+        background-color: #FFDA77;
+        margin-left: 10px;
+        margin-right: 5px;
+        padding-top: 5px;
+
+    }
+
+    #navbutton{
+        width:1;
+        text-align:center;
+        font-family: 'Arial';
+        background-color: #446AB8;
+        color: #FFF;
+        border:0;
+        float: right;
+        padding: 10px 30px 10px 30px;
+    }
+
+    #navbutton:hover{
+        background-color: #4C516D;
+    }
+
+    #navbuttonContainer{
+        width:40%;
+        padding-top:20px;
+        padding-bottom:10px;
+        margin-right: 20px;
+        float:right;
+    }
+    a:link {color: black;}      /* unvisited link */
+    a:visited {color: black;}   /* visited link */
+    a:active {color: black;}
+    a:hover {text-decoration: none;}
+
+    #info{
+        width: 100%;
+        margin-left: 100px;
+    }
+</style>
+</head>
+<body>
+    
+  <div class="section">
+    <div class="container">
+    </div>
+  </div>
+    <div class='row'>
+      <div class='col-sm-12' style="margin-bottom: 10px;">
+          <img src="{% static 'logo.jpg' %}" alt="Mountain">
+          <h1 id="IDName"> </h1>
+          <h4 id="historyDate"> </h4>
+      </div>
+      <!--
+      <textarea id="chat-log" cols="100" rows="20"></textarea><br/>
+      -->
+    </div>
+    <div class='row'>
+        <div class='chartContainer' style="margin-bottom: 30px;">
+            <canvas id="canvas" width="1000" height="1000"></canvas>
+        </div>
+    </div>
+    <div class='row' style="text-align:center" id="info">
+        <div class='col-sm-3' id="infobox">
+            <p id="flow-val"> Average Flow Rate: <br/> </p>
+        </div>
+        <div class='col-sm-3' id="infobox">
+            <p> Average Temperature: <br/> 37°C</p>
+        </div>
+        <div class='col-sm-3' id="infobox">
+            <p> Average Pressure: <br/> 40 mmHg</p>
+    </div>
+    <div class='row' id="navbuttonContainer">
+        <a href="{% url 'home' %}" id="navbutton" style="margin-left:5px;">Live Monitoring</a>
+        <a href="{% url 'search' %}" id="navbutton" style="margin-right:5px;">Data History</a>
+    </div>
+    </div>
+  </body>
 </html>
+{% endblock content %}
