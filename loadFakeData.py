@@ -14,7 +14,7 @@ if __name__=="__main__":
 			values_list.append(datetime.datetime.now())
 			values_list.append(number)
 
-			query = 'insert into ecg_data(user_id, date, ecg_value) VALUES(%s, %s, %s);'
+			query = 'insert into ecg_data(user_id, date_time, ecg_value) VALUES(%s, %s, %s);'
 			cur.execute(query, values_list)
 			conn.commit()
 	conn.close()
