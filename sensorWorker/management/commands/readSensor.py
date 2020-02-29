@@ -35,16 +35,16 @@ class Command(BaseCommand):
         GPIO.setup(27,GPIO.IN) #LOD-
         
         #Set up ECG variables        
-        BPM = 0
-        beat_old = 0
-        beats = np.zeros((1,500))  # Used to calculate average BPM
-        beatIndex = 0
-        threshold = 620.0  #Threshold at which BPM calculation occurs
-        belowThreshold = True
+        self.BPM = 0
+        self.beat_old = 0
+        self.beats = np.zeros(500)  # Used to calculate average BPM, creates a 1D array of size 500
+        self.beatIndex = 0
+        self.threshold = 620.0  #Threshold at which BPM calculation occurs
+        self.belowThreshold = True
         
         #Set up flow variables
-        global count
-        count = 0
+        # global count
+        self.count = 0
         
         GPIO.add_event_detect(flow_sensor, GPIO.FALLING, callback=countPulse)
         
@@ -67,9 +67,9 @@ class Command(BaseCommand):
             )
             time.sleep(1)
             
-            #Sensor update section
+            # Sensor update section
             
-            #ECG leads on check and update
+            # ECG leads on check and update
             if (GPIO.input(22) == 1 and GPIO.input(27) ==1):
                 print("Electrodes not connected")
             else:
@@ -77,7 +77,7 @@ class Command(BaseCommand):
                 print(ECG)
                 time.sleep(100)
                 
-            #BPM calculation check
+            # BPM calculation check
             if (ECG_output.value > threshold and belowThreshold == true):
                 BPM = calculateBPM()
                 belowThreshold = false
@@ -85,33 +85,36 @@ class Command(BaseCommand):
             elif(ECG_output.value < threshold):
                 belowThreshold = true 
                 
-            #Other sensor updates
-            flow = count / (60 * 7.5)
+            # Other sensor updates
+            flow = self.count / (60 * 7.5)
             #pressure =  pressure_oxy.value
             #temperature = temperature.value
             
-            self.stdout.write("ECG reading..." + str(ECG))
-            self.stdout.write("BPM reading..." + str(BPM))
+            self.stdout.write("ECG reading..." + str(self.ECG))
+            self.stdout.write("BPM reading..." + str(self.BPM))
             self.stdout.write("Flow reading..." + str(flow))
             #self.stdout.write("Flow reading..." + str(pressure))
             #self.stdout.write("Flow reading..." + str(temperature))
                   
             
     def countPulse(channel):
-        global count
-        count = count+1
-        flow = count / (60 * 7.5)
+        self.count = self.count + 1
+        flow = self.count / (60 * 7.5)
         return flow
         
-    def calculateBPM():
+    def calculateBPM(self):
         beat_new = int(round(time.time() * 1000))   #get current time
-        diff = beat_new - beat_old
+        diff = beat_new - self.beat_old
         currentBPM = 60000 / diff;    #convert to BPM
-        beats(1,beatIndex) = currentBPM #store for avg
-        total = 0.0
-        for i in range (0,500):
-            total = total + beats(1,i)
+        self.beats[self.beatIndex] = currentBPM #store for avg
+        total = sum(self.beats)
+        # for i in range (0,500):
+            # total = total + self.beats(1,i)
         BPM = total / 500
-        beat_old = beat_new;
+        self.beat_old = beat_new;
         beatIndex = (beatIndex + 1) % 500
         return BPM
+
+
+
+        
