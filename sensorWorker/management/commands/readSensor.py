@@ -1,8 +1,8 @@
 from django.core.management import BaseCommand
 from gpiozero import MCP3008
 import time, sys
-import RPI.GPIO as GPIO
-import numpy as np
+import RPi.GPIO as GPIO
+# import numpy as np
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from channels.generic.websocket import WebsocketConsumer
@@ -12,6 +12,7 @@ from channels.generic.websocket import WebsocketConsumer
 class Command(BaseCommand):
     # Show this when the user types help
     help="Simulates reading sensor and sending over Channel."
+
 
     # A command must define handle()
     def handle(self, *args, **options):
@@ -31,13 +32,14 @@ class Command(BaseCommand):
         flow_sensor = 23
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(flow_sensor, GPIO.IN, pull_up_down = GPIO.PUD_UP)
-        GPIO.setup(22,GPIO.IN) #LOD+
-        GPIO.setup(27,GPIO.IN) #LOD-
+        GPIO.setup(22,GPIO.IN) # LOD+
+        GPIO.setup(27,GPIO.IN) # LOD-
         
         #Set up ECG variables        
         self.BPM = 0
+        self.ECG = 0
         self.beat_old = 0
-        self.beats = np.zeros(500)  # Used to calculate average BPM, creates a 1D array of size 500
+        self.beats = [0] * 500 #np.zeros(500)  # Used to calculate average BPM, creates a 1D array of size 500
         self.beatIndex = 0
         self.threshold = 620.0  #Threshold at which BPM calculation occurs
         self.belowThreshold = True
@@ -45,6 +47,11 @@ class Command(BaseCommand):
         #Set up flow variables
         # global count
         self.count = 0
+
+        def countPulse(channel):
+            self.count = self.count + 1
+            flow = self.count / (60 * 7.5)
+            return flow
         
         GPIO.add_event_detect(flow_sensor, GPIO.FALLING, callback=countPulse)
         
@@ -54,18 +61,7 @@ class Command(BaseCommand):
         self.room_group_name = 'sensor'
         x = 0
         while True:
-            async_to_sync(self.channel_layer.group_send)(
-                self.room_group_name,
-                {
-                    'type' : 'sensor_reading',
-                    'ecg_value': ECG,
-                    'bpm': BPM,
-                    'flow_value': flow,
-                    'pressure_value': pressure,
-                    'temperature_value': temperature,
-                }
-            )
-            time.sleep(1)
+
             
             # Sensor update section
             
@@ -73,34 +69,42 @@ class Command(BaseCommand):
             if (GPIO.input(22) == 1 and GPIO.input(27) ==1):
                 print("Electrodes not connected")
             else:
-                ECG = ECG_output.value
-                print(ECG)
-                time.sleep(100)
+                self.ECG = ECG_output.value
+                print("ECG Connected, ECG: ", self.ECG)
+                # time.sleep(100)
                 
             # BPM calculation check
-            if (ECG_output.value > threshold and belowThreshold == true):
-                BPM = calculateBPM()
-                belowThreshold = false
+            if (ECG_output.value > self.threshold and belowThreshold == True):
+                self.BPM = calculateBPM()
+                belowThreshold = False
             
-            elif(ECG_output.value < threshold):
-                belowThreshold = true 
+            elif(ECG_output.value < self.threshold):
+                belowThreshold = True 
                 
             # Other sensor updates
-            flow = self.count / (60 * 7.5)
+            self.flow = self.count / (60 * 7.5)
             #pressure =  pressure_oxy.value
             #temperature = temperature.value
             
             self.stdout.write("ECG reading..." + str(self.ECG))
             self.stdout.write("BPM reading..." + str(self.BPM))
-            self.stdout.write("Flow reading..." + str(flow))
+            self.stdout.write("Flow reading..." + str(self.flow))
             #self.stdout.write("Flow reading..." + str(pressure))
             #self.stdout.write("Flow reading..." + str(temperature))
+
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {
+                    'type' : 'sensor_reading',
+                    'ecg_value': self.ECG,
+                    'bpm': self.BPM,
+                    'flow_value': self.flow,
+                    'pressure_value': pressure,
+                    'temperature_value': temperature,
+                }
+            )
+            time.sleep(1)
                   
-            
-    def countPulse(channel):
-        self.count = self.count + 1
-        flow = self.count / (60 * 7.5)
-        return flow
         
     def calculateBPM(self):
         beat_new = int(round(time.time() * 1000))   #get current time
