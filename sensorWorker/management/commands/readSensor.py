@@ -48,23 +48,20 @@ class Command(BaseCommand):
         # global count
         self.count = 0
 
-        def countPulse(channel):
+        def count_pulse(channel):
             self.count = self.count + 1
-            flow = self.count / (60 * 7.5)
+            flow = self.count / (7.5)
             return flow
         
-        GPIO.add_event_detect(flow_sensor, GPIO.FALLING, callback=countPulse)
+        GPIO.add_event_detect(flow_sensor, GPIO.FALLING, callback=count_pulse)
         
         pressure = 40
         temperature = 37
 
         self.room_group_name = 'sensor'
         x = 0
-        while True:
-
-            
+        while True: 
             # Sensor update section
-            
             # ECG leads on check and update
             if (GPIO.input(22) == 1 and GPIO.input(27) ==1):
                 print("Electrodes not connected")
@@ -75,7 +72,7 @@ class Command(BaseCommand):
                 
             # BPM calculation check
             if (ECG_output.value > self.threshold and belowThreshold == True):
-                self.BPM = calculateBPM()
+                self.BPM = calculate_BPM()
                 belowThreshold = False
             
             elif(ECG_output.value < self.threshold):
@@ -106,8 +103,9 @@ class Command(BaseCommand):
             time.sleep(1)
                   
         
-    def calculateBPM(self):
-        beat_new = int(round(time.time() * 1000))   #get current time
+    def calculate_BPM(self):
+        # get current time
+        beat_new = int(round(time.time() * 1000))
         diff = beat_new - self.beat_old
         currentBPM = 60000 / diff;    #convert to BPM
         self.beats[self.beatIndex] = currentBPM #store for avg

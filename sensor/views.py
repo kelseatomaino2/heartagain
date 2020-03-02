@@ -108,7 +108,7 @@ class search(TemplateView):
             date_str = post_data[start_or_end+"_date"] + " " + post_data[start_or_end + "_time"]
             date_time = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
         else:
-            print(post_data)
+            # print(post_data)
             date_str = post_data[start_or_end+"_date"] + " 0:0:0"
             date_time = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
         return date_time
@@ -146,7 +146,7 @@ class search(TemplateView):
             values = Session.objects.all()
 
         data = self.make_data_dictionary_list(values)
-        print(data)
+        # print(data)
         return data
     
     def make_data_dictionary_list(self, values):

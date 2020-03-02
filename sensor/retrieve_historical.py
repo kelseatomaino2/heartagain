@@ -18,5 +18,4 @@ class HistoricalEcgData():
 			data['values'].append(ecg_entry.ecg_value)
 			data['labels'].append(x)
 			x = x+1
-		print(data)
 		return data

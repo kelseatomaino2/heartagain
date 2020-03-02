@@ -22,7 +22,7 @@ from django.conf.urls import include
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^home/', views.home, name='home'),
-    path('sensor/', include('sensorWorker.urls')),
+    url(r'^sensor/', views.sensor, name='sensor'),
     url(r'^search/', views.search.as_view(), name='search'),
     url(r'^api/historical/$', views.get_historical_data, name='api-historical'),
     url(r'^historical/', views.historical, name='historical'),
