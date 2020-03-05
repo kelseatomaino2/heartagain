@@ -37,9 +37,11 @@ class EventConsumer(WebsocketConsumer):
     def sensor_reading(self, event):
         ecg_value = event['ecg_value']
         flow_value = event['flow_value']
+        bpm_value = event['bpm_value']
 
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'ecg_value': ecg_value,
-            'flow_value': flow_value
+            'flow_value': flow_value,
+            'bpm_value': bpm_value,
         }))

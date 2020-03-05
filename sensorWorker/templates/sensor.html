@@ -65,11 +65,18 @@
 
     chatSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
-        lineChartData.labels.push(data['label']);
-        lineChartData.datasets[0].data.push(data['ecg_value']);
+        if(lineChartData.datasets[0].data.length==50){
+            lineChartData.datasets[0].data = lineChartData.datasets[0].data.splice(0, 2);
+            lineChartData.labels = lineChartData.labels.splice(0, 2)
+            lineChartData.datasets[0].data.push(data['ecg_value']);  
+            lineChartData.labels.push(data['label']);   
+        }else{
+            lineChartData.datasets[0].data.push(data['ecg_value']); 
+            lineChartData.labels.push(data['label']);   
+        }
         myLine.update();
         document.getElementById("flow-val").innerHTML = "Flow Rate: " + '\n' + data['flow_value'] + " ml/min";
-        document.getElementById("bpm").innerHTML = "BPM: " + '\n' + data['bpm']
+        document.getElementById("bpm-val").innerHTML = "BPM: " + '\n' + data['bpm_value'];
     };
 
     chatSocket.onclose = function(e) {
@@ -191,7 +198,7 @@
             <p id="flow-val"> Flow Rate: <br/></p>
         </div>
          <div class='col-sm-2' id="infobox">
-            <p id="bpm"> BPM: <br/></p>
+            <p id="bpm-val"> BPM: <br/></p>
         </div>
         <div class='col-sm-2' id="infobox">
             <p>Temperature: <br/> 37°C</p>
