@@ -68,8 +68,8 @@
         lineChartData.labels.push(data['label']);
         lineChartData.datasets[0].data.push(data['ecg_value']);
         myLine.update();
-        document.getElementById("flow-val").innerHTML = "Flow Rate: " + '\n' + data['flow_value'] + 'ml/min';
-        document.getElementById("bpm").innerHTML = "BPM: " + '\n' data['bpm']
+        document.getElementById("flow-val").innerHTML = "Flow Rate: " + '\n' + data['flow_value'] + " ml/min";
+        document.getElementById("bpm").innerHTML = "BPM: " + '\n' + data['bpm']
     };
 
     chatSocket.onclose = function(e) {
