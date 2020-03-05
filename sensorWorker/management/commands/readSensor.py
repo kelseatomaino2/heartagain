@@ -39,6 +39,7 @@ class Command(BaseCommand):
         #Set up ECG variables        
         self.BPM = 0
         self.ECG = 0
+        self.flow = 0
         self.beat_old = 0
         self.beats = [0] * 500 #np.zeros(500)  # Used to calculate average BPM, creates a 1D array of size 500
         self.beatIndex = 0
