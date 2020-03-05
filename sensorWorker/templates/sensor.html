@@ -66,7 +66,7 @@
 
     chatSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
-        if(lineChartData.datasets[0].data.length==50){
+        if(lineChartData.datasets[0].data.length==100){
             lineChartData.datasets[0].data = lineChartData.datasets[0].data.splice(0, 2);
             lineChartData.labels = lineChartData.labels.splice(0, 2)
             lineChartData.datasets[0].data.push(data['ecg_value']);  

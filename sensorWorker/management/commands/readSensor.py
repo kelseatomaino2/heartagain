@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 from gpiozero import MCP3008
 import time, sys
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 # import numpy as np
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
@@ -40,7 +40,7 @@ class Command(BaseCommand):
         self.ECG = 0
         self.flow = 0
         self.beat_old = 0
-        self.beats = [0] * 500 #np.zeros(500)  # Used to calculate average BPM, creates a 1D array of size 500
+        self.beats = [0] * 4 #np.zeros(500)  # Used to calculate average BPM, creates a 1D array of size 500
         self.beatIndex = 0
         self.threshold = 0.9  #Threshold at which BPM calculation occurs
         self.belowThreshold = True
@@ -69,7 +69,6 @@ class Command(BaseCommand):
             # BPM calculation check
             if (self.ECG > self.threshold and self.belowThreshold == True):
                 self.BPM = self.calculate_BPM()
-                print("BPM Calculation: ", self.BPM)
                 belowThreshold = False
             
             elif(self.ECG < self.threshold):
@@ -118,10 +117,13 @@ class Command(BaseCommand):
         currentBPM = 60000 / diff;    #convert to BPM
         self.beats[self.beatIndex] = currentBPM #store for avg
         total = sum(self.beats)
-        BPM = total / 500
+        BPM = total / 4
         self.beat_old = beat_new;
-        self.beatIndex = (self.beatIndex + 1) % 500
-        return float(BPM)
+        if(self.beatIndex==3):
+            self.beatIndex = 0
+        else: 
+            self.beatIndex = self.beatIndex + 1
+        return float((0.5/0.024)*BPM)
 
         
 
