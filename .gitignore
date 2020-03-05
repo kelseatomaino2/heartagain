@@ -1,5 +1,6 @@
 *.pyc
 # Distribution / packaging 
+dump.rdb
 .Python build/ 
 develop-eggs/ 
 dist/ 

@@ -65,7 +65,8 @@
         lineChartData.labels.push(data['label']);
         lineChartData.datasets[0].data.push(data['ecg_value']);
         myLine.update();
-        document.getElementById("flow-val").innerHTML = "Average Flow Rate: " + '\n' + data['flow_value'];
+        document.getElementById("flow-val").innerHTML = "Flow Rate: " + '\n' + data['flow_value'] + 'ml/min';
+        document.getElementById("bpm").innerHTML = "BPM: " + '\n' data['bpm']
     };
 
     chatSocket.onclose = function(e) {
@@ -170,8 +171,8 @@
     <div class='row'>
       <div class='col-sm-12' style="margin-bottom: 10px;">
           <img src="{% static 'logo.jpg' %}" alt="Mountain">
-          <h1 id="IDName"> </h1>
-          <h4 id="historyDate"> </h4>
+          <h1>Live Monitoring: testid </h1>
+          <h4> </h4>
       </div>
       <!--
       <textarea id="chat-log" cols="100" rows="20"></textarea><br/>
@@ -182,15 +183,18 @@
             <canvas id="canvas" width="1000" height="1000"></canvas>
         </div>
     </div>
-    <div class='row' style="text-align:center" id="info">
-        <div class='col-sm-3' id="infobox">
-            <p id="flow-val"> Average Flow Rate: <br/> </p>
+   <div class='row' style="text-align:center" id="info">
+        <div class='col-sm-2' id="infobox">
+            <p id="flow-val"> Flow Rate: <br/></p>
         </div>
-        <div class='col-sm-3' id="infobox">
-            <p> Average Temperature: <br/> 37°C</p>
+         <div class='col-sm-2' id="infobox">
+            <p id="bpm"> BPM: <br/></p>
         </div>
-        <div class='col-sm-3' id="infobox">
-            <p> Average Pressure: <br/> 40 mmHg</p>
+        <div class='col-sm-2' id="infobox">
+            <p>Temperature: <br/> 37°C</p>
+        </div>
+        <div class='col-sm-2' id="infobox">
+            <p> Pressure: <br/> 40 mmHg</p>
     </div>
     <div class='row' id="navbuttonContainer">
         <a href="{% url 'home' %}" id="navbutton" style="margin-left:5px;">Home</a>
