@@ -83,7 +83,7 @@ class Command(BaseCommand):
                 belowThreshold = True 
                 
             # Other sensor updates
-            if(x=10):
+            if(x==10):
                 self.flow = self.count / (7.5)
                 self.count = 0
                 x = 0
