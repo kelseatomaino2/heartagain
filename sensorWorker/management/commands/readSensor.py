@@ -30,8 +30,8 @@ class Command(BaseCommand):
         
         #Setup up pins - digital
         flow_sensor = 23
-        #GPIO.setmode(GPIO.BCM)
-        #GPIO.setup(flow_sensor, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(flow_sensor, GPIO.IN, pull_up_down = GPIO.PUD_UP)
         #GPIO.setup(22,GPIO.IN) # LOD+
         #GPIO.setup(27,GPIO.IN) # LOD-
         
@@ -53,7 +53,7 @@ class Command(BaseCommand):
             self.count = self.count + 1
             return self.count
         
-        #GPIO.add_event_detect(flow_sensor, GPIO.FALLING, callback=count_pulse)
+        GPIO.add_event_detect(flow_sensor, GPIO.FALLING, callback=count_pulse)
 
         self.room_group_name = 'sensor'
         x = 0
@@ -104,12 +104,12 @@ class Command(BaseCommand):
             )
             time.sleep(0.5)
                   
-    # def take_ecg_reading(self):
-    #     if (GPIO.input(22) == 1 and GPIO.input(27) ==1):
-    #             print("Electrodes not connected")
-    #     else:
-    #         self.ECG = ECG_output.value
-    #         print("ECG Connected, ECG: ", self.ECG)
+    def take_ecg_reading(self):
+        if (GPIO.input(22) == 1 and GPIO.input(27) ==1):
+                print("Electrodes not connected")
+        else:
+            self.ECG = ECG_output.value
+            print("ECG Connected, ECG: ", self.ECG)
 
     def calculate_BPM(self):
         # get current time
