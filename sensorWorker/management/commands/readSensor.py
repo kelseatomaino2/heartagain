@@ -42,7 +42,7 @@ class Command(BaseCommand):
         self.beat_old = 0
         self.beats = [0] * 500 #np.zeros(500)  # Used to calculate average BPM, creates a 1D array of size 500
         self.beatIndex = 0
-        self.threshold = 0  #Threshold at which BPM calculation occurs
+        self.threshold = 0.9  #Threshold at which BPM calculation occurs
         self.belowThreshold = True
         
         self.count = 0

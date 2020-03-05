@@ -6,7 +6,7 @@ if __name__=="__main__":
 	conn = psycopg2.connect("host=localhost dbname=heartagain user=rpi_user password=rpi_user")
 	cur = conn.cursor()
 
-	with open('AEG.csv') as file:
+	with open('AEG_data.csv') as file:
 		reader = csv.reader(file)
 
 		for row in reader:
