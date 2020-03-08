@@ -64,21 +64,37 @@
         'ws://' + window.location.host +
         '/ws/sensor/');
 
+    var startButton = document.getElementById("startButton");
+    var stopButton = document.getElementById("stopButton");
+    var sendData;
+
+    startButton.onclick = function() {
+        sendData = true;
+    }
+
+    stopButton.onclick = function() {
+        sendData = false;
+    }
+ 
+
     chatSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
-        if(lineChartData.datasets[0].data.length==100){
-            lineChartData.datasets[0].data = lineChartData.datasets[0].data.splice(0, 2);
-            lineChartData.labels = lineChartData.labels.splice(0, 2)
-            lineChartData.datasets[0].data.push(data['ecg_value']);  
-            lineChartData.labels.push(data['label']);   
-        }else{
-            lineChartData.datasets[0].data.push(data['ecg_value']); 
-            lineChartData.labels.push(data['label']);   
+        if(sendData==true) {
+            if(lineChartData.datasets[0].data.length==100){
+                lineChartData.datasets[0].data = lineChartData.datasets[0].data.splice(0, 2);
+                lineChartData.labels = lineChartData.labels.splice(0, 2)
+                lineChartData.datasets[0].data.push(data['ecg_value']);  
+                lineChartData.labels.push(data['label']);   
+            }else{
+                lineChartData.datasets[0].data.push(data['ecg_value']); 
+                lineChartData.labels.push(data['label']);   
+            }
+            myLine.update();
+            document.getElementById("flow-val").innerHTML = "Flow Rate: " + '\n' + data['flow_value'] + " ml/min";
+            document.getElementById("bpm-val").innerHTML = "BPM: " + '\n' + data['bpm_value'];
         }
-        myLine.update();
-        document.getElementById("flow-val").innerHTML = "Flow Rate: " + '\n' + data['flow_value'] + " ml/min";
-        document.getElementById("bpm-val").innerHTML = "BPM: " + '\n' + data['bpm_value'];
     };
+  
 
     chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
@@ -151,6 +167,28 @@
         padding: 10px 30px 10px 30px;
     }
 
+    #startButton{
+        width:1;
+        text-align:center;
+        font-family: 'Arial';
+        background-color: #446AB8;
+        color: #FFF;
+        border:0;
+        float: right;
+        padding: 10px 30px 10px 30px;
+    }
+
+     #stopButton{
+        width:1;
+        text-align:center;
+        font-family: 'Arial';
+        background-color: #446AB8;
+        color: #FFF;
+        border:0;
+        float: right;
+        padding: 10px 30px 10px 30px;
+    }
+
     #navbutton:hover{
         background-color: #4C516D;
     }
@@ -162,6 +200,23 @@
         margin-right: 20px;
         float:right;
     }
+
+    #startButtonContainer{
+        width:40%;
+        padding-top:20px;
+        padding-bottom:10px;
+        margin-right: 20px;
+        float:left;
+    }
+
+    #startButton:hover{
+        background-color: #4C516D;
+    }
+
+    #stopButton:hover{
+        background-color: #4C516D;
+    }
+
     a:link {color: black;}      /* unvisited link */
     a:visited {color: black;}   /* visited link */
     a:active {color: black;}
@@ -174,7 +229,6 @@
 </style>
 </head>
 <body>
-    
   <div class="section">
     <div class="container">
     </div>
@@ -184,7 +238,11 @@
           <img src="{% static 'logo.jpg' %}" alt="Mountain">
           <h1>Live Monitoring: testid </h1>
           <h4> </h4>
-      </div>
+        <div class='row' id="startButtonContainer">
+        <button onClick="sendDataValue()" id="stopButton" style="margin-left:5px;">Stop Monitoring</button>
+        <button onClick="stopData()" id="startButton" style="margin-right:5px;">Start Monitoring</button>
+        </div>
+    </div>
       <!--
       <textarea id="chat-log" cols="100" rows="20"></textarea><br/>
       -->
@@ -214,4 +272,5 @@
     </div>
   </body>
 </html>
+
 {% endblock content %}
