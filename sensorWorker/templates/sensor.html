@@ -25,10 +25,13 @@
           }]
     };
 
+    var rectangleSet = false;
     var ctx = document.getElementById("canvas").getContext("2d");
-    var myLine = new Chart(ctx , {
+    var myLine = new Chart(ctx, {
     type: "line",
     data: lineChartData,
+    maintainAspectRatio: false,
+    responsive: true,
     options: {
         legend: {
             display: false
@@ -56,7 +59,8 @@
             },
         ]
         },
-      }, 
+        
+        }
     });
 
     
@@ -81,8 +85,8 @@
         var data = JSON.parse(e.data);
         if(sendData==true) {
             if(lineChartData.datasets[0].data.length==100){
-                lineChartData.datasets[0].data = lineChartData.datasets[0].data.splice(0, 2);
-                lineChartData.labels = lineChartData.labels.splice(0, 2)
+                lineChartData.datasets[0].data.splice(0, 2);
+                lineChartData.labels.splice(0, 2)
                 lineChartData.datasets[0].data.push(data['ecg_value']);  
                 lineChartData.labels.push(data['label']);   
             }else{
@@ -110,12 +114,29 @@
   <title>{% block title %}Sensor Example{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style type="text/css" media="screen">
+
+    .chartWrapper {
+    position: relative;
+    }
+
+    .chartWrapper > canvas {
+        position: absolute;
+        left: 0;
+        top: 0;
+        pointer-events:none;
+    }
+
+    .chartAreaWrapper {
+        text-align: center;
+        overflow-x: scroll;
+    }
     h1{
         color: "black";
     }
     .chartContainer{
         text-align: center;
     }
+
     h4{
         color: "black";
 
@@ -248,9 +269,11 @@
       -->
     </div>
     <div class='row'>
-        <div class='chartContainer' style="margin-bottom: 30px;">
+    <div class='chartWrapper'>
+        <div class='chartAreaWrapper' style="margin-bottom: 30px;">
             <canvas id="canvas" width="1000" height="1000"></canvas>
         </div>
+            <canvas id="myChartAxis" height="1000" width=0 ></canvas>
     </div>
    <div class='row' style="text-align:center" id="info">
         <div class='col-sm-2' id="infobox">
