@@ -255,7 +255,7 @@
     <div class='row'>
       <div class='col-sm-12' style="margin-bottom: 10px;">
           <img src="{% static 'logo.jpg' %}" alt="Mountain">
-          <h1>Live Monitoring: {{ id }} </h1>
+          <h1>Live Monitoring: {{ user_id }} </h1>
           <h4> </h4>
         <div id="startButtonContainer">
         <button onClick="sendDataValue()" id="stopButton" style="margin-left:5px;">Stop Monitoring</button>
@@ -291,7 +291,7 @@
             <p> 40 mmHg</p>
     </div>
     <div class='row' id="navbuttonContainer">
-        <a href="{% url 'home' %}" id="navbutton" style="margin-left:5px;">Home</a>
+        <a href="{% url 'finish' user_id=user_id %}" id="navbutton" style="margin-left:5px;">Finish Transport</a>
         <a href="{% url 'search' %}" id="navbutton" style="margin-right:5px;">Data History</a>
     </div>
     </div>

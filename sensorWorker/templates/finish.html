@@ -1,0 +1,160 @@
+{% block content %}
+<!DOCTYPE html>
+{% load static %} 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transport History</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <style type="text/css" media="screen">
+    #sidenav {
+        min-height:100vh;
+        background-color: #FCF2C7;
+        padding-top: 20px;
+    }
+
+    #patientlist{
+        font-family:'Arial';
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    #patientlist td, #patientlist th{
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    #patientlist tr:hover{
+        background-color: #ddd;
+    }
+    #homenav{
+        background-color: #FCF2C7;
+        padding-top:60px;
+        padding-bottom:60px;
+        float: center;
+        min-height:40vh;
+    }
+
+    #patientlist th{
+        padding-top: 12px;
+        padding-bottom: 12px;
+        font-size:1.2em;
+        background-color: #446AB8;
+        color: white;
+    }
+
+    #patientlist td{
+        color: #696969;
+    }
+
+    h1 {
+        font-family: 'Arial';
+        color: #446AB8;
+        padding-left: 10px;
+    }
+
+    p {
+        font-family: 'Arial';
+        padding-top: 5px;
+        padding-left: 2px;
+    }
+
+    input {
+        padding-left: 5px;
+        padding-top: 5px;
+        width:100%;
+    }
+
+    #form{
+        text-align: center;
+        width:25%;
+        float: center;
+        padding-bottom: 20px
+    }
+    #submit{
+        margin-top: 20px;
+        margin-right: 100px;
+    }
+
+    #submitButton{
+        text-align:center;
+        font-family: 'Arial';
+        width:30%;
+        background-color: #446AB8;
+        margin-top: 20px;
+        color: #FFF;
+        border:0;
+        padding-bottom:5px;
+        float:center;
+    }
+
+    #submitButton:hover{
+        background-color: #4C516D;
+    }
+
+    #navbutton{
+        width:1;
+        text-align:center;
+        font-family: 'Arial';
+        background-color: #446AB8;
+        color: #FFF;
+        border:0;
+        float: right;
+        padding: 8px 25px 8px 25px;
+    }
+
+    #navbutton:hover{
+        background-color: #4C516D;
+    }
+
+    #navbuttonContainer{
+        padding-top:20px;
+        padding-bottom:10px;
+    }
+
+    .header{
+        padding-bottom:30px;
+    }
+
+    .header h1{
+        float:left;
+    }
+
+    .header img{
+        float:right;
+        width: 139.8px;
+        height: 81px;
+    }
+
+    .box-form{
+        float:center;
+        background-color: white;
+        text-align:center;
+    }
+
+    a:link {color: #696969;}      /* unvisited link */
+    a:visited {color: #696969;}   /* visited link */
+    a:active {color: #696969;}
+    a:hover {text-decoration: none;}
+</style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row" id="sidenav">
+                <h4 style="font-family: Arial; text-align: center;">Transport Session Form: {{ user_id }}</h4><br>
+                <div class="box-form">
+                    <form id="form" action="/home/" method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input id="submitButton" type="submit" value="OK">
+                </div>
+            </form>
+        </div>
+        </div>
+</body>
+</html>
+{% endblock content %}

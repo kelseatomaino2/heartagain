@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from sensorWorker.models import EcgData
 from sensorWorker.models import Session
-from sensorWorker.forms import TransportForm
+from sensorWorker.forms import TransportForm, FinishForm
 
 def home(request):
 
@@ -20,10 +20,37 @@ def home(request):
     })
 
 def sensor(request):
-    latest_added = Session.objects.latest('start_date')
-    return render(request, 'sensor.html', {
-        'id': latest_added.user_id[0:8],
-    })
+    sessions = Session.objects.all()
+    if not sessions:
+        form = TransportForm()
+        return render(request, 'transport.html', {'form': form})
+    else:
+        latest_added = Session.objects.latest('start_date')
+        return render(request, 'sensor.html', {
+            'user_id': latest_added.user_id[0:8],
+        })
+
+def finish(request, user_id):   
+    if(request.method=='POST'):
+        form = FinishForm(request.POST)
+        if(form.is_valid()):
+            origin_hospital = form.cleaned_data['origin']
+            destination_hospital = form.cleaned_data['destination']
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+            notes = form.cleaned_data['notes']
+            print(notes)
+            print(user_id)
+            print(form.cleaned_data)
+            session_info = InsertSession(origin_hospital, destination_hospital, start_date, notes)
+            session_info.edit_transport_session(end_date, user_id, notes)
+            return HttpResponseRedirect('home')
+    else:
+
+        data = Session.objects.values().filter(user_id__startswith=user_id).first()
+        data['end_date'] = datetime.now()
+        form = FinishForm(data)
+        return render(request, 'finish.html', {'user_id':user_id, 'form': form})
 
 def get_historical_data(request):
 	data = {
@@ -40,15 +67,15 @@ def transport(request):
         form = TransportForm(request.POST)
 
         if(form.is_valid()):
-            origin_hospital = form.cleaned_data['origin_hospital']
-            destination_hospital = form.cleaned_data['destination_hospital']
+            origin_hospital = form.cleaned_data['origin']
+            destination_hospital = form.cleaned_data['destination']
             start_date = form.cleaned_data['start_date']
             if not start_date:
                 start_date = datetime.now()
             session_info = InsertSession(origin_hospital, destination_hospital, start_date)
             session_info.insert_transport_session()
             request.method = "GET"
-            return render(request, 'sensor.html', {'id': session_info.session_id[0:8]})
+            return render(request, 'sensor.html', {'user_id': session_info.session_id[0:8]})
 
     else:
         form = TransportForm()
