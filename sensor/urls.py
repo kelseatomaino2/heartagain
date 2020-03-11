@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^search/', views.search.as_view(), name='search'),
     url(r'^api/historical/$', views.get_historical_data, name='api-historical'),
     url(r'^historical/', views.historical, name='historical'),
+    url(r'^transport/', views.transport, name='transport'),
     url(r'^api/chart/historical/$', views.ChartData.as_view()),
 ]

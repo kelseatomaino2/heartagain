@@ -42,7 +42,7 @@ class PressureData(models.Model):
         db_table = 'pressure_data'
 
 class TemperatureData(models.Model):
-    user_id = models.CharField(max_length=100)
+    user_id = models.CharField(max_length=100, unique=True, default='Test')
     date_time = models.DateTimeField()
     temperature_value = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
