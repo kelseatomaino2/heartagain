@@ -1,15 +1,17 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from datetime import datetime
 from django.contrib.auth import get_user_model
 from django.views.generic import View
 from sensor.retrieve_historical import HistoricalEcgData
+from sensor.insert_session import InsertSession
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from sensorWorker.models import EcgData
 from sensorWorker.models import Session
+from sensorWorker.forms import TransportForm
 
 def home(request):
 
@@ -18,8 +20,9 @@ def home(request):
     })
 
 def sensor(request):
+    latest_added = Session.objects.latest('start_date')
     return render(request, 'sensor.html', {
-        'sensor': '99',
+        'id': latest_added.user_id[0:8],
     })
 
 def get_historical_data(request):
@@ -31,6 +34,26 @@ def get_historical_data(request):
 
 def historical(request):
 	return render(request, 'historical.html',)
+
+def transport(request):
+    if(request.method=='POST'):
+        form = TransportForm(request.POST)
+
+        if(form.is_valid()):
+            origin_hospital = form.cleaned_data['origin_hospital']
+            destination_hospital = form.cleaned_data['destination_hospital']
+            start_date = form.cleaned_data['start_date']
+            if not start_date:
+                start_date = datetime.now()
+            session_info = InsertSession(origin_hospital, destination_hospital, start_date)
+            session_info.insert_transport_session()
+            request.method = "GET"
+            return render(request, 'sensor.html', {'id': session_info.session_id[0:8]})
+
+    else:
+        form = TransportForm()
+
+    return render(request, 'transport.html', {'form': form})
 
 class ChartData(APIView):
     authentication_classes = []
@@ -68,7 +91,7 @@ class search(TemplateView):
     def check_if_valid(self, post_data):
         validation_check = {}
         if(post_data['user_id']):
-            values = Session.objects.all().filter(user_id=post_data['user_id'])
+            values = Session.objects.all().filter(user_id__startswith=post_data['user_id'])
             if not values:
                 validation_check['is_valid'] = False
                 validation_check['message'] = "That ID does not exist, please try again"
@@ -115,20 +138,20 @@ class search(TemplateView):
 
     def query_database(self, post_data):
         if(post_data['user_id'] != '' and post_data['start_date']=='' and post_data['end_date']==''):
-            values = Session.objects.all().filter(user_id=post_data['user_id'])
+            values = Session.objects.all().filter(user_id__startswith=post_data['user_id'])
 
         elif(post_data['user_id'] != '' and post_data['start_date'] != '' and post_data['end_date']==''):
             start_date_time = self.get_datetime_str("start", post_data)
-            values = Session.objects.all().filter(user_id=post_data['user_id'], start_date=start_date_time)
+            values = Session.objects.all().filter(user_id__startswith=post_data['user_id'], start_date=start_date_time)
 
         elif(post_data['user_id'] != '' and post_data['start_date'] == '' and post_data['end_date']!=''):
             end_date_time = self.get_datetime("end", post_data)
-            values = Session.objects.all().filter(user_id=post_data['user_id'], end_date=end_date_time)
+            values = Session.objects.all().filter(user_id__startswith=post_data['user_id'], end_date=end_date_time)
 
         elif(post_data['user_id'] != '' and post_data['start_date'] != '' and post_data['end_date'] != ''):
             start_date_time = self.get_datetime_str("start", post_data)
             end_date_time = self.get_datetime_str("end", post_data)
-            values = Session.objects.all().filter(user_id=post_data['user_id'], start_date=start_date_time, end_date=end_date_time)
+            values = Session.objects.all().filter(user_id__startswith=post_data['user_id'], start_date=start_date_time, end_date=end_date_time)
 
         elif(post_data['user_id'] == '' and post_data['start_date'] != '' and post_data['end_date']==''):
             start_date_time = self.get_datetime_str("start", post_data)
@@ -154,10 +177,22 @@ class search(TemplateView):
         for data_entry in values:
             row_dict = {}
             row_dict['user_id'] = data_entry.user_id
-            row_dict['start_date'] = datetime.strftime(data_entry.start_date, "%Y-%m-%d")
-            row_dict['start_time'] = datetime.strftime(data_entry.start_date, "%H:%M:%S")
-            row_dict['end_date'] = datetime.strftime(data_entry.end_date, "%Y-%m-%d")
-            row_dict['end_time'] = datetime.strftime(data_entry.end_date, "%H:%M:%S")
+            try:
+                row_dict['start_date'] = datetime.strftime(data_entry.start_date, "%Y-%m-%d")
+            except TypeError:
+                row_dict['start_date'] = ''
+            try:
+                row_dict['start_time'] = datetime.strftime(data_entry.start_date, "%H:%M:%S")
+            except TypeError:
+                row_dict['start_time'] = ''
+            try:    
+                row_dict['end_date'] = datetime.strftime(data_entry.end_date, "%Y-%m-%d")
+            except TypeError:
+                row_dict['end_date'] = ''
+            try:
+                row_dict['end_time'] = datetime.strftime(data_entry.end_date, "%H:%M:%S")
+            except:
+                row_dict['end_time'] = ''
+            
             data.append(row_dict)
-
         return data

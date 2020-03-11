@@ -9,7 +9,7 @@ class HistoricalEcgData():
 		ecg_data = EcgData.objects.all().filter(user_id='testid')
 		#print(ecg_data)
 		data = {}
-		data['date'] = date
+		data['date'] = date.strftime("%Y-%m-%d")
 		data['user_id'] = user_id
 		data['values'] = []
 		data['labels'] = []

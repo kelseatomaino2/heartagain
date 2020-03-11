@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 from gpiozero import MCP3008
 import time, sys
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 # import numpy as np
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
@@ -29,8 +29,8 @@ class Command(BaseCommand):
         #temperature = MCP3008(channel=6, device=0)
         
         #Setup up pins - digital
-        flow_sensor = 23
-        GPIO.setmode(GPIO.BCM)
+        #flow_sensor = 23
+        #GPIO.setmode(GPIO.BCM)
         #GPIO.setup(flow_sensor, GPIO.IN, pull_up_down = GPIO.PUD_UP)
         #GPIO.setup(22,GPIO.IN) # LOD+
         #GPIO.setup(27,GPIO.IN) # LOD-
@@ -53,7 +53,7 @@ class Command(BaseCommand):
             self.count = self.count + 1
             return self.count
         
-        GPIO.add_event_detect(flow_sensor, GPIO.FALLING, callback=count_pulse)
+        #GPIO.add_event_detect(flow_sensor, GPIO.FALLING, callback=count_pulse)
 
         self.room_group_name = 'sensor'
         x = 0

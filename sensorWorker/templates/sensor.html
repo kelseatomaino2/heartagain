@@ -94,8 +94,8 @@
                 lineChartData.labels.push(data['label']);   
             }
             myLine.update();
-            document.getElementById("flow-val").innerHTML = "Flow Rate: " + '\n' + data['flow_value'] + " ml/min";
-            document.getElementById("bpm-val").innerHTML = "BPM: " + '\n' + data['bpm_value'];
+            document.getElementById("flow-val").innerHTML = data['flow_value'] + " ml/min";
+            document.getElementById("bpm-val").innerHTML = data['bpm_value'];
         }
     };
   
@@ -223,11 +223,9 @@
     }
 
     #startButtonContainer{
-        width:40%;
-        padding-top:20px;
-        padding-bottom:10px;
-        margin-right: 20px;
-        float:left;
+        margin: 0 auto;
+        float: center;
+
     }
 
     #startButton:hover{
@@ -257,9 +255,9 @@
     <div class='row'>
       <div class='col-sm-12' style="margin-bottom: 10px;">
           <img src="{% static 'logo.jpg' %}" alt="Mountain">
-          <h1>Live Monitoring: testid </h1>
+          <h1>Live Monitoring: {{ id }} </h1>
           <h4> </h4>
-        <div class='row' id="startButtonContainer">
+        <div id="startButtonContainer">
         <button onClick="sendDataValue()" id="stopButton" style="margin-left:5px;">Stop Monitoring</button>
         <button onClick="stopData()" id="startButton" style="margin-right:5px;">Start Monitoring</button>
         </div>
@@ -277,16 +275,20 @@
     </div>
    <div class='row' style="text-align:center" id="info">
         <div class='col-sm-2' id="infobox">
-            <p id="flow-val"> Flow Rate: <br/></p>
+            <p> Flow Rate: </p>
+            <p id="flow-val"> 0 mL/min</p>
         </div>
          <div class='col-sm-2' id="infobox">
-            <p id="bpm-val"> BPM: <br/></p>
+            <p> BPM: </p>
+            <p id="bpm-val" > 0</p>
         </div>
         <div class='col-sm-2' id="infobox">
-            <p>Temperature: <br/> 37°C</p>
+            <p>Temperature: </p>
+            <p> 37°C</p>
         </div>
         <div class='col-sm-2' id="infobox">
-            <p> Pressure: <br/> 40 mmHg</p>
+            <p> Pressure: </p> 
+            <p> 40 mmHg</p>
     </div>
     <div class='row' id="navbuttonContainer">
         <a href="{% url 'home' %}" id="navbutton" style="margin-left:5px;">Home</a>
