@@ -97,6 +97,11 @@
             document.getElementById("flow-val").innerHTML = data['flow_value'] + " ml/min";
             document.getElementById("bpm-val").innerHTML = data['bpm_value'];
         }
+        if(data['flow_value']==0){
+            document.getElementById('flowAlert').innerHTML = "Alert: Flow Rate is too low"
+        }else{
+            document.getElementById('flowAlert').innerHTML = "All good"
+        }
     };
   
 
@@ -135,6 +140,10 @@
     }
     .chartContainer{
         text-align: center;
+    }
+    h2{
+        text-align: center;
+        color: red;
     }
 
     h4{
@@ -213,6 +222,9 @@
     #navbutton:hover{
         background-color: #4C516D;
     }
+    #flow-alert{
+        float: center;
+    }
 
     #navbuttonContainer{
         width:40%;
@@ -273,6 +285,10 @@
         </div>
             <canvas id="myChartAxis" height="1000" width=0 ></canvas>
     </div>
+    </div>
+    <div class='row' id=flow-alert>
+        <h2 id="flowAlert"> </h2>
+    </div>
    <div class='row' style="text-align:center" id="info">
         <div class='col-sm-2' id="infobox">
             <p> Flow Rate: </p>
@@ -290,6 +306,7 @@
             <p> Pressure: </p> 
             <p> 40 mmHg</p>
     </div>
+
     <div class='row' id="navbuttonContainer">
         <a href="{% url 'finish' user_id=user_id %}" id="navbutton" style="margin-left:5px;">Finish Transport</a>
         <a href="{% url 'search' %}" id="navbutton" style="margin-right:5px;">Data History</a>

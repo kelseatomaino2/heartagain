@@ -58,6 +58,7 @@ class Command(BaseCommand):
         self.room_group_name = 'sensor'
         x = 0
         i = 0
+        flow_alert = False
         while True: 
             if(i==self.total_aeg_values):
                 i = 0
@@ -83,6 +84,12 @@ class Command(BaseCommand):
                 x = x+1
             #pressure =  pressure_oxy.value
             #temperature = temperature.value
+            if(self.flow==0):
+                flow_alert = True
+            else:
+                flow_alert = False
+        
+
             
             self.stdout.write("ECG reading..." + str(self.ECG))
             self.stdout.write("BPM reading..." + str(self.BPM))
