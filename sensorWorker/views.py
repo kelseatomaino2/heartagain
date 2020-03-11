@@ -39,9 +39,6 @@ def finish(request, user_id):
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date']
             notes = form.cleaned_data['notes']
-            print(notes)
-            print(user_id)
-            print(form.cleaned_data)
             session_info = InsertSession(origin_hospital, destination_hospital, start_date, notes)
             session_info.edit_transport_session(end_date, user_id, notes)
             request.method = "GET"
@@ -67,7 +64,6 @@ def transport(request):
         form = TransportForm(request.POST)
 
         if(form.is_valid()):
-            print(form.cleaned_data)
             origin_hospital = form.cleaned_data['origin']
             destination_hospital = form.cleaned_data['destination']
             start_date = form.cleaned_data['start_date']

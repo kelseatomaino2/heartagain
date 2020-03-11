@@ -70,10 +70,10 @@
     }
 
     #form{
-        text-align: center;
-        width:25%;
         float: center;
-        padding-bottom: 20px
+        padding-bottom: 20px;
+        line-height: 2.0;
+        font-size: 17px;
     }
     #submit{
         margin-top: 20px;
@@ -89,7 +89,6 @@
         color: #FFF;
         border:0;
         padding-bottom:5px;
-        float:center;
     }
 
     #submitButton:hover{
@@ -131,9 +130,24 @@
     }
 
     .box-form{
-        float:center;
         background-color: white;
-        text-align:center;
+        width:35%;
+        margin:0 auto;
+        padding-top:30px;
+        padding-left: 30px;
+        padding-right:30px;
+        padding-bottom: 20px;
+        border: 20px black;
+    }
+
+    .title_style{
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+
+    .row{
+        padding-right: 20px;
     }
 
     a:link {color: #696969;}      /* unvisited link */
@@ -145,12 +159,14 @@
 <body>
     <div class="container-fluid">
         <div class="row" id="sidenav">
-                <h4 style="font-family: Arial; text-align: center;">Transport Session Form</h4><br>
-                <div class="box-form">
+            <div class="box-form">
+                <h4 style="font-family: Arial; text-align: center" class="title_style">Start a Transport Procedure</h4><br>
                     <form id="form" action="/transport/" method="post">
                     {% csrf_token %}
                     {{ form }}
-                    <input id="submitButton" type="submit" value="OK">
+                    <div style="text-align: center">
+                        <input id="submitButton" type="submit" value="OK">
+                    </div>
                 </div>
             </form>
                 <div class="row" id="homenav" style="align-items: center;">

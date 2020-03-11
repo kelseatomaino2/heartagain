@@ -183,7 +183,6 @@
         margin-left: 10px;
         margin-right: 5px;
         padding-top: 5px;
-
     }
 
     #navbutton{
@@ -230,15 +229,16 @@
         width:40%;
         padding-top:20px;
         padding-bottom:10px;
-        margin-right: 20px;
+        padding-right: 40px;
         float:right;
     }
 
     #startButtonContainer{
-        margin: 0 auto;
-        float: center;
-
+        float:center;
+        width: 45%;
+        margin-left:217px;
     }
+
 
     #startButton:hover{
         background-color: #4C516D;
@@ -255,7 +255,8 @@
 
     #info{
         width: 100%;
-        margin-left: 100px;
+        margin-left: 153px;
+        float:center;
     }
 </style>
 </head>
@@ -270,8 +271,8 @@
           <h1>Live Monitoring: {{ user_id }} </h1>
           <h4> </h4>
         <div id="startButtonContainer">
-        <button onClick="sendDataValue()" id="stopButton" style="margin-left:5px;">Stop Monitoring</button>
-        <button onClick="stopData()" id="startButton" style="margin-right:5px;">Start Monitoring</button>
+            <button onClick="sendDataValue()" id="stopButton" style="margin-left:5px">Stop Monitoring</button>
+            <button onClick="stopData()" id="startButton" style="margin-right:5px;">Start Monitoring</button>
         </div>
     </div>
       <!--
@@ -286,10 +287,13 @@
             <canvas id="myChartAxis" height="1000" width=0 ></canvas>
     </div>
     </div>
+    
+
     <div class='row' id=flow-alert>
         <h2 id="flowAlert"> </h2>
     </div>
-   <div class='row' style="text-align:center" id="info">
+
+   <div class='row' id="info">
         <div class='col-sm-2' id="infobox">
             <p> Flow Rate: </p>
             <p id="flow-val"> 0 mL/min</p>
