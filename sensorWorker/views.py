@@ -44,9 +44,9 @@ def finish(request, user_id):
             print(form.cleaned_data)
             session_info = InsertSession(origin_hospital, destination_hospital, start_date, notes)
             session_info.edit_transport_session(end_date, user_id, notes)
-            return HttpResponseRedirect('home')
+            request.method = "GET"
+            return render(request, 'home.html',)
     else:
-
         data = Session.objects.values().filter(user_id__startswith=user_id).first()
         data['end_date'] = datetime.now()
         form = FinishForm(data)
@@ -67,6 +67,7 @@ def transport(request):
         form = TransportForm(request.POST)
 
         if(form.is_valid()):
+            print(form.cleaned_data)
             origin_hospital = form.cleaned_data['origin']
             destination_hospital = form.cleaned_data['destination']
             start_date = form.cleaned_data['start_date']

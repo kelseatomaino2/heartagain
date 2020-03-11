@@ -147,7 +147,7 @@
         <div class="row" id="sidenav">
                 <h4 style="font-family: Arial; text-align: center;">Transport Session Form: {{ user_id }}</h4><br>
                 <div class="box-form">
-                    <form id="form" action="/home/" method="post">
+                    <form id="form" action="{% url 'finish' user_id=user_id %}" method="post">
                     {% csrf_token %}
                     {{ form }}
                     <input id="submitButton" type="submit" value="OK">
