@@ -28,4 +28,6 @@ urlpatterns = [
     url(r'^historical/', views.historical, name='historical'),
     url(r'^transport/', views.transport, name='transport'),
     url(r'^api/chart/historical/$', views.ChartData.as_view()),
+    url(r'^finish/(?P<user_id>\w+)/$', views.finish, name='finish'),
+
 ]

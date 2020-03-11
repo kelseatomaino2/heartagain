@@ -4,15 +4,16 @@ from django.utils import timezone
 
 # Create your models here.
 class Session(models.Model):
-	user_id = models.CharField(max_length=100)
-	start_date = models.DateTimeField(default=timezone.now)
-	end_date = models.DateTimeField(null=True, blank=True)
-	origin = models.CharField(max_length=100)
-	destination = models.CharField(max_length=100)
+    user_id = models.CharField(max_length=100)
+    start_date = models.DateTimeField(default=timezone.now)
+    end_date = models.DateTimeField(null=True, blank=True)
+    origin = models.CharField(max_length=100)
+    destination = models.CharField(max_length=100)
+    notes = models.CharField(max_length=400, blank=True, null=True)
 
-	class Meta:
-		app_label = 'sensorWorker'
-		db_table = 'session_info'
+    class Meta:
+        app_label = 'sensorWorker'
+        db_table = 'session_info'
 
 class EcgData(models.Model):
     user_id = models.CharField(max_length=100)
