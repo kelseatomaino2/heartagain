@@ -97,10 +97,10 @@
             document.getElementById("flow-val").innerHTML = data['flow_value'] + " ml/min";
             document.getElementById("bpm-val").innerHTML = data['bpm_value'];
         }
-        if(data['flow_value']==0 || data['flow_value'] >= 1){
+        if(data['flow_value']==0 || data['flow_value'] >= 1.7){
             document.getElementById('flowAlert').innerHTML = "Alert: Flow Rate is too low"
         }else{
-            document.getElementById('flowAlert').innerHTML = "All good"
+            document.getElementById('flowAlert').innerHTML = ""
         }
     };
   
