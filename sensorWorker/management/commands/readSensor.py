@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 from gpiozero import MCP3008
 import time, sys
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from channels.generic.websocket import WebsocketConsumer
@@ -36,10 +36,10 @@ class Command(BaseCommand):
         
         #Setup up pins - digital
         flow_sensor = 23
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(flow_sensor, GPIO.IN, pull_up_down = GPIO.PUD_UP)
-        GPIO.setup(22,GPIO.IN) # LOD+
-        GPIO.setup(27,GPIO.IN) # LOD-
+        #GPIO.setmode(GPIO.BCM)
+        #GPIO.setup(flow_sensor, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+        #GPIO.setup(22,GPIO.IN) # LOD+
+        #GPIO.setup(27,GPIO.IN) # LOD-
         
         #Set up ECG variables        
         self.BPM = 0
@@ -62,21 +62,23 @@ class Command(BaseCommand):
             self.count = self.count + 1
             return self.count
         
-        GPIO.add_event_detect(flow_sensor, GPIO.FALLING, callback=count_pulse)
+        #GPIO.add_event_detect(flow_sensor, GPIO.FALLING, callback=count_pulse)
 
         self.room_group_name = 'sensor'
         x = 0
         i = 0
         flow_alert = False
-        # This is an infinite loop that is 
+        self.ecg_values = []
+        self.flow_values = []
+        # This is an infinite loop that needs to be fixed. It is displayed via start and stop in the UI.
         while True: 
+            # Following if statement needs to be replaced by self.take_ecg_reading()
             if(i==self.total_aeg_values):
                 i = 0
                 self.ECG = float(self.aeg_values[i].ecg_value)
             else:
                 self.ECG = float(self.aeg_values[i].ecg_value)
-                i = i+1
-                
+                i = i+1    
             # BPM calculation check
             if (self.ECG > self.threshold and self.belowThreshold == True):
                 self.BPM = self.calculate_BPM()
@@ -92,23 +94,35 @@ class Command(BaseCommand):
                 x = 0
             else:
                 x = x+1
-            pressure =  pressure_oxy.value
-            temperature = temperature.value
+            #pressure =  pressure_oxy.value
+            #temperature = temperature.value
 
             if(self.flow==0):
                 flow_alert = True
             else:
                 flow_alert = False
-        
-
             
-            self.stdout.write("ECG reading..." + str(self.ECG))
-            self.stdout.write("BPM reading..." + str(self.BPM))
-            self.stdout.write("Flow reading..." + str(self.flow))
+            #TODO: Add values to arrays for other sensors and insert statements
+            ecg_dict = {'date_time': datetime.datetime.now(), 'ecg_value': self.ECG}
+            self.ecg_values.append(ecg_dict)
+
+            flow_dict = {'date_time': datetime.datetime.now(), 'flow_value': self.flow}
+            self.flow_values.append(flow_dict)
+
+            # Insert every 50 values
+            if(len(self.ecg_values)==50):
+                self.insert_ecg_values(self.ecg_values)
+
+            if(len(self.flow_values)==50):
+                self.insert_flow_values(self.flow_values)
+
 
             # These needed to be added when these sensors are connected
             #self.stdout.write("Pressure reading..." + str(pressure))
             #self.stdout.write("Temperature reading..." + str(temperature))
+
+            self.stdout.write("ECG reading..." + str(self.ECG))
+            self.stdout.write("Flow reading..." + str(self.flow))
 
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
@@ -131,19 +145,17 @@ class Command(BaseCommand):
             self.ECG = ECG_output.value
             print("ECG Connected, ECG: ", self.ECG)
 
-    def insert_into_database(self, id, ecg_value=None, flow_value=None, pressure_value=None, temperature_value=None):
-        if(ecg_vale):
-            ecg = EcgData(user_id=self.session_id, date_time=datetime.datetime.now() 
-                ecg_value=ecg_value)
+    def insert_ecg_values(self, ecg_values):
+        for value in (ecg_values):
+            ecg = EcgData(user_id=self.user_id, date_time=value['date_time'], 
+                ecg_value=value['ecg_value'])
             ecg.save()
-        else if(flow_value):
-            flow = FlowData(user_id=self.session_id, date_time=datetime.datetime.now(), 
-                flow_value=flow_value)
+        
+    def insert_flow_values(self, flow_values):
+         for value in (flow_values):
+            flow = FlowData(user_id=self.user_id, date_time=value['date_time'], 
+                flow_value=value['flow_value'])
             flow.save()
-        else:
-            ("Print no value to insert")
-        # TODO: Make if statements for remaining sensor values -> import models to insert into db tables
-
 
     def calculate_BPM(self):
         # get current time

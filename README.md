@@ -4,7 +4,7 @@
 The purpose of this application is to monitor the state of an ex vivo heart during transportation. It stores incoming data from sensor readings to be queried at a later date. 
 
 ### Features
-The web application uses a background task and the GPiO library to read from ECG, temperature, flow and pressure sensors. The data is displayed using web sockets. The data is stored in a relational database and there is a search tool to filter historical data.
+The web application uses a background task and the GPIO library to read from ECG, temperature, flow and pressure sensors. The data is displayed using web sockets. The data is stored in a relational database and there is a search tool to filter historical data.
 
 ### Running the App Locally
 
@@ -16,12 +16,12 @@ The web application uses a background task and the GPiO library to read from ECG
 `source heartenv bin activate`
 5. Install the requirements 
 `pip install -r requirments.txt`
-6. Install postgres and create a database with tables matching the models in sensorWorker/models.py 
+6. Install postgres and create a database with tables matching the models in sensorWorker/models.py. Update the database in settings.py to point to this database or the database of your choosing.
 7. Run migrations 
 `python manage.py migrate`
 
 #### To run the app without the Raspberry Pi
-8. Comment out any lines of code using the GPiO library
+8. Comment out any lines of code using the GPIO library
 9. Cd into the project directory
 10. Acitvate the virtual environment
 11. Start the redis server 
